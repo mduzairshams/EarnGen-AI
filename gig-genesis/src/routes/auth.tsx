@@ -93,7 +93,7 @@ function AuthPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link to="/" className="font-semibold text-2xl tracking-tight text-brand inline-flex items-center gap-2">
-            <img src="/logo.png" alt="EARNGEN-AI logo" width={36} height={36} className="size-9" />
+            <img src="/logo-cropped.png" alt="EARNGEN-AI logo" className="size-9 rounded-full object-cover ring-2 ring-brand/10 bg-white" />
             EARNGEN-AI<span className="text-foreground">.</span>
           </Link>
           <p className="text-sm text-muted-foreground mt-2">Your skills deserve a salary.</p>

@@ -46,7 +46,7 @@ function Index() {
   function generate() {
     if (!user || skills.length === 0) return;
     update({ skills });
-    navigate({ to: "/opportunities" });
+    navigate({ to: "/assessment", search: { onboard: true } });
   }
 
   const locked = !user;

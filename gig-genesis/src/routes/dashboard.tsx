@@ -1,9 +1,11 @@
-import { createFileRoute, Link, ClientOnly } from "@tanstack/react-router";
+import { createFileRoute, Link, ClientOnly, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import { Shell, Card, Stat } from "@/components/Layout";
 import { RequireAuth } from "@/components/RequireAuth";
 import { useAppState, totalEarned } from "@/lib/store";
 import { useDisplayUser } from "@/lib/useDisplayUser";
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, Tooltip, PieChart, Pie, Cell } from "recharts";
+import { Brain, Star, Sparkles } from "lucide-react";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -18,6 +20,10 @@ export const Route = createFileRoute("/dashboard")({
 function Dashboard() {
   const { state } = useAppState();
   const me = useDisplayUser();
+  const navigate = useNavigate();
+  const [upskillSkill, setUpskillSkill] = useState("");
+  const [customSkill, setCustomSkill] = useState("");
+  const [isCustom, setIsCustom] = useState(false);
   const displayName = me.name;
   const total = totalEarned(state.income);
   const streak = state.sprint?.completedDays.length ?? 0;
@@ -46,8 +52,9 @@ function Dashboard() {
       <header className="mb-8 fade-up">
         <p className="text-sm text-muted-foreground">Welcome back,</p>
         <h1 className="text-3xl font-semibold tracking-tight">{displayName} 👋</h1>
-        <p className="text-muted-foreground mt-1">
-          You've earned <span className="font-semibold text-foreground">₹{total.toLocaleString("en-IN")}</span> across {state.income.length} gigs. Streak: 🔥 {streak} days.
+        <p className="text-muted-foreground mt-1.5 flex items-center gap-2 text-sm">
+          <Sparkles className="size-4 text-brand animate-pulse shrink-0" />
+          <span>Turn your skills into daily income and build a certified portfolio that top recruiters trust!</span>
         </p>
       </header>
 
@@ -130,6 +137,82 @@ function Dashboard() {
           </p>
         </Card>
       )}
+
+      {/* ── Upskilling Assessment Card ── */}
+      <Card className="p-6 mb-10">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="size-10 rounded-xl bg-brand/10 flex items-center justify-center">
+            <Brain className="size-5 text-brand" />
+          </div>
+          <div>
+            <p className="text-xs font-semibold text-brand uppercase tracking-wider">Upskilling & Level Up</p>
+            <h2 className="font-semibold mt-0.5">Take Assessment for Upskilling</h2>
+          </div>
+        </div>
+        <p className="text-sm text-muted-foreground mb-6 max-w-2xl text-pretty">
+          Choose a specific skill to test your knowledge with a moderate-level AI assessment. Upon successful completion, your verified skill level will be highlighted to potential recruiters on your profile.
+        </p>
+
+        <div className="flex flex-col sm:flex-row items-end gap-4 max-w-xl">
+          <div className="flex-1 w-full space-y-2">
+            <label className="text-xs font-medium text-muted-foreground block">Select Skill</label>
+            {isCustom ? (
+              <input
+                type="text"
+                placeholder="Type custom skill..."
+                value={customSkill}
+                onChange={(e) => setCustomSkill(e.target.value)}
+                className="w-full bg-muted/50 ring-1 ring-border rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand"
+              />
+            ) : (
+              <select
+                value={upskillSkill}
+                onChange={(e) => {
+                  if (e.target.value === "__custom__") {
+                    setIsCustom(true);
+                  } else {
+                    setUpskillSkill(e.target.value);
+                  }
+                }}
+                className="w-full bg-muted/50 ring-1 ring-border rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand"
+              >
+                <option value="">-- Choose one --</option>
+                {(state.skills.length > 0 ? state.skills : ["Python", "Canva", "Content Writing", "Video Editing", "Figma"]).map((s) => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+                <option value="__custom__">+ Type a custom skill...</option>
+              </select>
+            )}
+          </div>
+          <div className="w-full sm:w-auto">
+            <button
+              onClick={() => {
+                const target = isCustom ? customSkill.trim() : upskillSkill;
+                if (!target) return;
+                navigate({
+                  to: "/assessment",
+                  search: { skill: target, difficulty: "medium" },
+                });
+              }}
+              disabled={!(isCustom ? customSkill.trim() : upskillSkill)}
+              className="w-full bg-brand text-brand-foreground text-sm font-semibold px-5 py-2.5 rounded-lg hover:brightness-105 disabled:opacity-50 disabled:cursor-not-allowed transition shrink-0"
+            >
+              Start Moderate Assessment →
+            </button>
+          </div>
+        </div>
+        {isCustom && (
+          <button
+            onClick={() => {
+              setIsCustom(false);
+              setCustomSkill("");
+            }}
+            className="text-xs text-brand font-medium mt-2 hover:underline"
+          >
+            ← Back to dropdown list
+          </button>
+        )}
+      </Card>
 
       <Card className="p-4 sm:p-6">
         <div className="flex items-center justify-between mb-4">

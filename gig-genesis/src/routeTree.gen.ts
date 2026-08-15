@@ -9,18 +9,32 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UpskillRouteImport } from './routes/upskill'
 import { Route as SprintRouteImport } from './routes/sprint'
 import { Route as SpeakWithAiRouteImport } from './routes/speak-with-ai'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as RedeemRouteImport } from './routes/redeem'
 import { Route as ProofRouteImport } from './routes/proof'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as OpportunitiesRouteImport } from './routes/opportunities'
+import { Route as MarketplaceRouteImport } from './routes/marketplace'
+import { Route as LeaderboardRouteImport } from './routes/leaderboard'
 import { Route as IncomeRouteImport } from './routes/income'
+import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as ChatsRouteImport } from './routes/chats'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AssessmentRouteImport } from './routes/assessment'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RUsernameRouteImport } from './routes/r.$username'
+import { Route as NdaExchangeIdRouteImport } from './routes/nda.$exchangeId'
+import { Route as CheckoutGigIdRouteImport } from './routes/checkout.$gigId'
 
+const UpskillRoute = UpskillRouteImport.update({
+  id: '/upskill',
+  path: '/upskill',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SprintRoute = SprintRouteImport.update({
   id: '/sprint',
   path: '/sprint',
@@ -34,6 +48,11 @@ const SpeakWithAiRoute = SpeakWithAiRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RedeemRoute = RedeemRouteImport.update({
+  id: '/redeem',
+  path: '/redeem',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProofRoute = ProofRouteImport.update({
@@ -51,9 +70,24 @@ const OpportunitiesRoute = OpportunitiesRouteImport.update({
   path: '/opportunities',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MarketplaceRoute = MarketplaceRouteImport.update({
+  id: '/marketplace',
+  path: '/marketplace',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeaderboardRoute = LeaderboardRouteImport.update({
+  id: '/leaderboard',
+  path: '/leaderboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IncomeRoute = IncomeRouteImport.update({
   id: '/income',
   path: '/income',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExploreRoute = ExploreRouteImport.update({
+  id: '/explore',
+  path: '/explore',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -61,9 +95,19 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ChatsRoute = ChatsRouteImport.update({
+  id: '/chats',
+  path: '/chats',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssessmentRoute = AssessmentRouteImport.update({
+  id: '/assessment',
+  path: '/assessment',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -76,105 +120,185 @@ const RUsernameRoute = RUsernameRouteImport.update({
   path: '/r/$username',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NdaExchangeIdRoute = NdaExchangeIdRouteImport.update({
+  id: '/nda/$exchangeId',
+  path: '/nda/$exchangeId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutGigIdRoute = CheckoutGigIdRouteImport.update({
+  id: '/checkout/$gigId',
+  path: '/checkout/$gigId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
+  '/chats': typeof ChatsRoute
   '/dashboard': typeof DashboardRoute
+  '/explore': typeof ExploreRoute
   '/income': typeof IncomeRoute
+  '/leaderboard': typeof LeaderboardRoute
+  '/marketplace': typeof MarketplaceRoute
   '/opportunities': typeof OpportunitiesRoute
   '/profile': typeof ProfileRoute
   '/proof': typeof ProofRoute
+  '/redeem': typeof RedeemRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/speak-with-ai': typeof SpeakWithAiRoute
   '/sprint': typeof SprintRoute
+  '/upskill': typeof UpskillRoute
+  '/checkout/$gigId': typeof CheckoutGigIdRoute
+  '/nda/$exchangeId': typeof NdaExchangeIdRoute
   '/r/$username': typeof RUsernameRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
+  '/chats': typeof ChatsRoute
   '/dashboard': typeof DashboardRoute
+  '/explore': typeof ExploreRoute
   '/income': typeof IncomeRoute
+  '/leaderboard': typeof LeaderboardRoute
+  '/marketplace': typeof MarketplaceRoute
   '/opportunities': typeof OpportunitiesRoute
   '/profile': typeof ProfileRoute
   '/proof': typeof ProofRoute
+  '/redeem': typeof RedeemRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/speak-with-ai': typeof SpeakWithAiRoute
   '/sprint': typeof SprintRoute
+  '/upskill': typeof UpskillRoute
+  '/checkout/$gigId': typeof CheckoutGigIdRoute
+  '/nda/$exchangeId': typeof NdaExchangeIdRoute
   '/r/$username': typeof RUsernameRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
+  '/chats': typeof ChatsRoute
   '/dashboard': typeof DashboardRoute
+  '/explore': typeof ExploreRoute
   '/income': typeof IncomeRoute
+  '/leaderboard': typeof LeaderboardRoute
+  '/marketplace': typeof MarketplaceRoute
   '/opportunities': typeof OpportunitiesRoute
   '/profile': typeof ProfileRoute
   '/proof': typeof ProofRoute
+  '/redeem': typeof RedeemRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/speak-with-ai': typeof SpeakWithAiRoute
   '/sprint': typeof SprintRoute
+  '/upskill': typeof UpskillRoute
+  '/checkout/$gigId': typeof CheckoutGigIdRoute
+  '/nda/$exchangeId': typeof NdaExchangeIdRoute
   '/r/$username': typeof RUsernameRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/assessment'
     | '/auth'
+    | '/chats'
     | '/dashboard'
+    | '/explore'
     | '/income'
+    | '/leaderboard'
+    | '/marketplace'
     | '/opportunities'
     | '/profile'
     | '/proof'
+    | '/redeem'
     | '/sitemap.xml'
     | '/speak-with-ai'
     | '/sprint'
+    | '/upskill'
+    | '/checkout/$gigId'
+    | '/nda/$exchangeId'
     | '/r/$username'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/assessment'
     | '/auth'
+    | '/chats'
     | '/dashboard'
+    | '/explore'
     | '/income'
+    | '/leaderboard'
+    | '/marketplace'
     | '/opportunities'
     | '/profile'
     | '/proof'
+    | '/redeem'
     | '/sitemap.xml'
     | '/speak-with-ai'
     | '/sprint'
+    | '/upskill'
+    | '/checkout/$gigId'
+    | '/nda/$exchangeId'
     | '/r/$username'
   id:
     | '__root__'
     | '/'
+    | '/assessment'
     | '/auth'
+    | '/chats'
     | '/dashboard'
+    | '/explore'
     | '/income'
+    | '/leaderboard'
+    | '/marketplace'
     | '/opportunities'
     | '/profile'
     | '/proof'
+    | '/redeem'
     | '/sitemap.xml'
     | '/speak-with-ai'
     | '/sprint'
+    | '/upskill'
+    | '/checkout/$gigId'
+    | '/nda/$exchangeId'
     | '/r/$username'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AssessmentRoute: typeof AssessmentRoute
   AuthRoute: typeof AuthRoute
+  ChatsRoute: typeof ChatsRoute
   DashboardRoute: typeof DashboardRoute
+  ExploreRoute: typeof ExploreRoute
   IncomeRoute: typeof IncomeRoute
+  LeaderboardRoute: typeof LeaderboardRoute
+  MarketplaceRoute: typeof MarketplaceRoute
   OpportunitiesRoute: typeof OpportunitiesRoute
   ProfileRoute: typeof ProfileRoute
   ProofRoute: typeof ProofRoute
+  RedeemRoute: typeof RedeemRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SpeakWithAiRoute: typeof SpeakWithAiRoute
   SprintRoute: typeof SprintRoute
+  UpskillRoute: typeof UpskillRoute
+  CheckoutGigIdRoute: typeof CheckoutGigIdRoute
+  NdaExchangeIdRoute: typeof NdaExchangeIdRoute
   RUsernameRoute: typeof RUsernameRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/upskill': {
+      id: '/upskill'
+      path: '/upskill'
+      fullPath: '/upskill'
+      preLoaderRoute: typeof UpskillRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sprint': {
       id: '/sprint'
       path: '/sprint'
@@ -194,6 +318,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/redeem': {
+      id: '/redeem'
+      path: '/redeem'
+      fullPath: '/redeem'
+      preLoaderRoute: typeof RedeemRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/proof': {
@@ -217,11 +348,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OpportunitiesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/marketplace': {
+      id: '/marketplace'
+      path: '/marketplace'
+      fullPath: '/marketplace'
+      preLoaderRoute: typeof MarketplaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leaderboard': {
+      id: '/leaderboard'
+      path: '/leaderboard'
+      fullPath: '/leaderboard'
+      preLoaderRoute: typeof LeaderboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/income': {
       id: '/income'
       path: '/income'
       fullPath: '/income'
       preLoaderRoute: typeof IncomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/explore': {
+      id: '/explore'
+      path: '/explore'
+      fullPath: '/explore'
+      preLoaderRoute: typeof ExploreRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -231,11 +383,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/chats': {
+      id: '/chats'
+      path: '/chats'
+      fullPath: '/chats'
+      preLoaderRoute: typeof ChatsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assessment': {
+      id: '/assessment'
+      path: '/assessment'
+      fullPath: '/assessment'
+      preLoaderRoute: typeof AssessmentRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -252,20 +418,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RUsernameRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/nda/$exchangeId': {
+      id: '/nda/$exchangeId'
+      path: '/nda/$exchangeId'
+      fullPath: '/nda/$exchangeId'
+      preLoaderRoute: typeof NdaExchangeIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout/$gigId': {
+      id: '/checkout/$gigId'
+      path: '/checkout/$gigId'
+      fullPath: '/checkout/$gigId'
+      preLoaderRoute: typeof CheckoutGigIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AssessmentRoute: AssessmentRoute,
   AuthRoute: AuthRoute,
+  ChatsRoute: ChatsRoute,
   DashboardRoute: DashboardRoute,
+  ExploreRoute: ExploreRoute,
   IncomeRoute: IncomeRoute,
+  LeaderboardRoute: LeaderboardRoute,
+  MarketplaceRoute: MarketplaceRoute,
   OpportunitiesRoute: OpportunitiesRoute,
   ProfileRoute: ProfileRoute,
   ProofRoute: ProofRoute,
+  RedeemRoute: RedeemRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SpeakWithAiRoute: SpeakWithAiRoute,
   SprintRoute: SprintRoute,
+  UpskillRoute: UpskillRoute,
+  CheckoutGigIdRoute: CheckoutGigIdRoute,
+  NdaExchangeIdRoute: NdaExchangeIdRoute,
   RUsernameRoute: RUsernameRoute,
 }
 export const routeTree = rootRouteImport

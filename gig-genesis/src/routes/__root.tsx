@@ -60,8 +60,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", type: "image/png", href: "/logo.png" },
-      { rel: "apple-touch-icon", href: "/logo.png" },
+      { rel: "icon", type: "image/png", href: "/logo-cropped.png" },
+      { rel: "apple-touch-icon", href: "/logo-cropped.png" },
     ],
   }),
   shellComponent: RootShell,
@@ -73,7 +73,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <head><HeadContent /></head>
+      <head>
+        <HeadContent />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                const theme = localStorage.getItem("earngen.theme") || "system";
+                if (theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+                  document.documentElement.classList.add("dark");
+                } else {
+                  document.documentElement.classList.remove("dark");
+                }
+              } catch (_) {}
+            `
+          }}
+        />
+      </head>
       <body>{children}<Scripts /></body>
     </html>
   );

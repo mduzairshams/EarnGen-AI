@@ -1,17 +1,17 @@
 import { Link, Outlet, useRouterState, useNavigate } from "@tanstack/react-router";
-import { ReactNode, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { ReactNode, useState, useEffect } from "react";
+import { Menu, X, Bot, LogOut, MessageSquare } from "lucide-react";
 import { useAuth } from "@/lib/auth";
-import logoUrl from "@/assets/logo.png";
+import logoUrl from "@/assets/logo-cropped.png";
 
 const NAV_AUTH = [
-  { to: "/speak-with-ai", label: "Speak with AI" },
   { to: "/dashboard", label: "Dashboard" },
   { to: "/opportunities", label: "Opportunities" },
+  { to: "/assessment", label: "Assessment" },
+  { to: "/leaderboard", label: "Leaderboard" },
+  { to: "/upskill", label: "Upskill" },
   { to: "/sprint", label: "7-Day Sprint" },
-  { to: "/income", label: "Income" },
   { to: "/proof", label: "Proof-of-Work" },
-  { to: "/profile", label: "Profile" },
 ] as const;
 
 export function Shell({ children }: { children?: ReactNode }) {
@@ -20,8 +20,31 @@ export function Shell({ children }: { children?: ReactNode }) {
   const { user, profile, avatarUrl, signOut, loading } = useAuth();
   const navigate = useNavigate();
 
+  const [showBubble, setShowBubble] = useState(false);
+
+  useEffect(() => {
+    if (!user) {
+      setShowBubble(false);
+      return;
+    }
+    // Initial delay before first pop
+    const initialTimer = setTimeout(() => {
+      setShowBubble(true);
+    }, 3000);
+
+    // Toggle every 5 seconds to pop in and out dynamically!
+    const interval = setInterval(() => {
+      setShowBubble((prev) => !prev);
+    }, 5000);
+
+    return () => {
+      clearTimeout(initialTimer);
+      clearInterval(interval);
+    };
+  }, [user]);
+
   const initial = (profile?.full_name || user?.email || "?").charAt(0).toUpperCase();
-  const homeHref = user ? "/speak-with-ai" : "/";
+  const homeHref = user ? "/dashboard" : "/";
 
   async function handleSignOut() {
     await signOut();
@@ -42,14 +65,14 @@ export function Shell({ children }: { children?: ReactNode }) {
       <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-8">
-            <Link to={homeHref} className="font-semibold tracking-tight text-lg text-brand inline-flex items-center gap-2">
-              <img src={logoUrl} alt="EARNGEN-AI logo" width={40} height={40} className="size-10" />
+            <Link to={homeHref} className="font-semibold tracking-tight text-lg text-brand inline-flex items-center gap-2 select-none hover:opacity-90 transition-opacity shrink-0">
+              <img src={logoUrl} alt="EARNGEN-AI logo" className="size-10 rounded-full object-cover ring-2 ring-brand/10 bg-white" />
               <span>
                 EARNGEN<span className="text-foreground">-AI</span>
               </span>
             </Link>
             {user ? (
-              <div className="hidden md:flex items-center gap-6">
+              <div className="hidden lg:flex items-center gap-2">
                 {NAV_AUTH.map((n) => {
                   const active = path === n.to || path.startsWith(n.to);
                   return (
@@ -57,8 +80,10 @@ export function Shell({ children }: { children?: ReactNode }) {
                       key={n.to}
                       to={n.to}
                       className={
-                        "text-sm font-medium transition-colors " +
-                        (active ? "text-foreground" : "text-muted-foreground hover:text-foreground")
+                        "text-[10px] font-bold tracking-wider uppercase px-3 py-1.5 rounded-xl transition-all duration-200 select-none " +
+                        (active
+                          ? "bg-brand/10 text-brand shadow-sm"
+                          : "text-muted-foreground hover:bg-muted/40 hover:text-foreground")
                       }
                     >
                       {n.label}
@@ -71,27 +96,41 @@ export function Shell({ children }: { children?: ReactNode }) {
           <div className="flex items-center gap-3">
             {user ? (
               <>
-                <Link to="/profile" className="hidden sm:flex items-center gap-2 hover:opacity-80 transition-opacity">
-                  <div className="size-8 rounded-full bg-gradient-to-br from-brand to-brand-light overflow-hidden grid place-items-center text-xs text-white font-semibold shrink-0">
+                <Link to="/profile" className="hidden sm:flex items-center gap-2 hover:opacity-85 transition-opacity">
+                  <div className="size-8 rounded-full bg-gradient-to-br from-brand to-brand-light overflow-hidden grid place-items-center text-xs text-white font-bold shrink-0 ring-1 ring-border">
                     {avatarUrl
                       ? <img src={avatarUrl} alt="avatar" className="size-full object-cover" />
                       : initial}
                   </div>
-                  <span className="text-xs font-medium text-muted-foreground hidden md:inline">
+                  <span className="text-xs font-semibold text-muted-foreground hidden lg:inline truncate max-w-[120px]">
                     {profile?.full_name || user.email}
                   </span>
                 </Link>
+                {/* Real-time Chat Workspace Icon */}
+                <Link
+                  to="/chats"
+                  className={`inline-flex size-8 items-center justify-center rounded-xl transition-all border border-border/40 relative shrink-0 ${
+                    path === "/chats"
+                      ? "bg-brand/10 text-brand border-brand/20 shadow-sm"
+                      : "bg-muted/40 text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                  }`}
+                  title="Messages & P2P Chats"
+                >
+                  <MessageSquare className="size-4" />
+                  <span className="absolute -top-0.5 -right-0.5 size-2 rounded-full bg-brand animate-pulse" />
+                </Link>
                 <button
                   onClick={handleSignOut}
-                  className="hidden md:inline-flex text-xs font-semibold tracking-wide uppercase text-muted-foreground hover:text-foreground"
+                  className="hidden lg:inline-flex size-8 items-center justify-center rounded-xl bg-muted/40 hover:bg-red-500/10 text-muted-foreground hover:text-red-500 transition-colors group shrink-0 border border-border/40"
+                  title="Sign out"
                 >
-                  Sign out
+                  <LogOut className="size-4 group-hover:-translate-x-0.5 transition-transform" />
                 </button>
               </>
             ) : (
               <Link
                 to="/auth"
-                className="hidden md:inline-flex rounded-lg bg-foreground text-background px-3 py-1.5 text-xs font-semibold"
+                className="hidden lg:inline-flex rounded-lg bg-foreground text-background px-3 py-1.5 text-xs font-semibold hover:opacity-90 transition-opacity"
               >
                 Sign in
               </Link>
@@ -101,17 +140,20 @@ export function Shell({ children }: { children?: ReactNode }) {
               aria-label="Toggle menu"
               aria-expanded={open}
               onClick={() => setOpen((v) => !v)}
-              className="md:hidden inline-flex size-9 items-center justify-center rounded-lg ring-1 ring-border text-foreground"
+              className="lg:hidden inline-flex size-9 items-center justify-center rounded-lg ring-1 ring-border text-foreground hover:bg-muted/40 transition-colors shrink-0"
             >
               {open ? <X className="size-4" /> : <Menu className="size-4" />}
             </button>
           </div>
         </div>
         {open ? (
-          <div className="md:hidden border-t border-border bg-background">
+          <div className="lg:hidden border-t border-border bg-background">
             <div className="px-4 py-3 flex flex-col gap-1">
               {user
-                ? NAV_AUTH.map((n) => {
+                ? [
+                    ...NAV_AUTH.map((n) => ({ to: n.to, label: n.label })),
+                    { to: "/chats", label: "💬 Messages & Chats" },
+                  ].map((n) => {
                     const active = path === n.to || path.startsWith(n.to);
                     return (
                       <Link
@@ -202,24 +244,60 @@ export function Shell({ children }: { children?: ReactNode }) {
           </div>
         </div>
       </footer>
+
+      {user && (
+        <div className="fixed bottom-6 right-6 z-50 flex items-center">
+          {/* Attention Popover Thought Bubble */}
+          <div
+            className={`absolute right-16 bottom-2 bg-foreground text-background text-xs font-bold px-3 py-2 rounded-xl whitespace-nowrap shadow-xl border border-border flex items-center gap-1.5 z-40 select-none transition-all duration-300 transform origin-right ${
+              showBubble ? "scale-100 opacity-100 translate-x-0" : "scale-75 opacity-0 translate-x-4 pointer-events-none"
+            }`}
+          >
+            <span>Need AI help? 🤖</span>
+            {/* Thought speech bubble pointer arrow */}
+            <div className="absolute right-[-6px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[6px] border-l-foreground" />
+          </div>
+
+          {/* Floating Action Button */}
+          <Link
+            to="/speak-with-ai"
+            className="size-14 rounded-full bg-brand text-brand-foreground shadow-lg hover:shadow-brand/20 hover:scale-110 active:scale-95 transition-all flex items-center justify-center group relative z-50"
+            title="Speak with AI"
+            onClick={() => setShowBubble(false)}
+          >
+            <img 
+              src={logoUrl} 
+              alt="AI Bot" 
+              className="size-7 rounded-full object-cover group-hover:rotate-12 transition-transform duration-300 filter saturate-150 brightness-110"
+              loading="lazy"
+            />
+            <span className="absolute right-16 scale-0 group-hover:scale-100 bg-foreground text-background text-[11px] font-bold px-2.5 py-1.5 rounded-lg whitespace-nowrap transition-all shadow-md duration-200">
+              Speak with AI Chatbot 🤖
+            </span>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
 
-export function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <div className={"rounded-2xl bg-card ring-1 ring-border " + className}>{children}</div>;
+export function Card({ children, className = "", style }: { children: ReactNode; className?: string; style?: React.CSSProperties }) {
+  return <div style={style} className={"rounded-2xl bg-card ring-1 ring-border " + className}>{children}</div>;
 }
 
 export function Stat({ label, value, sub, accent }: { label: string; value: string; sub?: string; accent?: boolean }) {
   return (
     <div
       className={
-        "p-4 sm:p-6 rounded-2xl ring-1 " + (accent ? "bg-foreground text-background ring-foreground" : "bg-card ring-border")
+        "p-4 sm:p-6 rounded-2xl ring-1 transition-all duration-300 " +
+        (accent
+          ? "bg-brand text-brand-foreground ring-brand shadow-lg shadow-brand/10 hover:shadow-brand/20"
+          : "bg-card ring-border")
       }
     >
-      <p className={"text-xs font-medium mb-2 " + (accent ? "text-background/70" : "text-muted-foreground")}>{label}</p>
-      <p className="text-2xl sm:text-3xl font-semibold tracking-tight truncate">{value}</p>
-      {sub ? <p className={"text-xs font-medium mt-2 " + (accent ? "text-brand-light" : "text-brand")}>{sub}</p> : null}
+      <p className={"text-[10px] font-bold uppercase tracking-wider mb-2 " + (accent ? "text-brand-foreground/85" : "text-muted-foreground")}>{label}</p>
+      <p className="text-2xl sm:text-3xl font-bold tracking-tight truncate">{value}</p>
+      {sub ? <p className={"text-xs font-medium mt-2 " + (accent ? "text-brand-foreground/90" : "text-brand")}>{sub}</p> : null}
     </div>
   );
 }

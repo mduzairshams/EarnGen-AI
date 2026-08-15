@@ -31,7 +31,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(s);
       if (s?.user) {
         // Defer profile fetch to avoid deadlocks
-        setTimeout(() => fetchProfile(s.user.id), 0);
+        setTimeout(() => fetchProfile(s.user.id, s.user), 0);
       } else {
         setProfile(null);
       }
@@ -39,14 +39,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Then check existing session
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
-      if (data.session?.user) fetchProfile(data.session.user.id);
+      if (data.session?.user) fetchProfile(data.session.user.id, data.session.user);
       setLoading(false);
     });
     return () => sub.subscription.unsubscribe();
   }, []);
 
-  async function fetchProfile(id: string) {
-    const { data } = await supabase.from("profiles").select("full_name,college,city").eq("id", id).maybeSingle();
+  async function fetchProfile(id: string, userObj?: User) {
+    let { data, error } = await supabase.from("profiles").select("full_name,college,city").eq("id", id).maybeSingle();
+    
+    // Self-healing database upsert fallback to write meta fields to public.profiles table instantly
+    if (!data && userObj?.user_metadata) {
+      const userMeta = userObj.user_metadata;
+      const fallbackProfile = {
+        id,
+        full_name: userMeta.full_name || null,
+        college: userMeta.college || null,
+        city: userMeta.city || null
+      };
+      
+      const { data: upserted } = await supabase
+        .from("profiles")
+        .upsert(fallbackProfile)
+        .select("full_name,college,city")
+        .maybeSingle();
+      
+      if (upserted) {
+        data = upserted;
+      }
+    }
+    
     if (data) setProfile(data as Profile);
   }
 
