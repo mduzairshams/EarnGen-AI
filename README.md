@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://via.placeholder.com/150x150.png?text=EarnGen+AI" alt="EarnGen AI Logo" width="120" height="120" />
+  <img src="https://earngen-ai-six.vercel.app/assets/logo-cropped-D-K4UGuR.png" alt="EarnGen AI Logo" width="120" height="120" />
   <h1>🚀 EarnGen AI: The Next-Gen Autonomous Gig Ecosystem</h1>
   <p>
     <b>Where AI meets human potential. A gamified, secure, and intelligent marketplace for the future of work.</b>
@@ -45,15 +45,15 @@ The dashboard provides rich data visualizations (powered by `Recharts`) for your
 
 ## 🏗️ Technical Architecture & Stack
 
-EarnGen AI is built for speed, SEO, and massive scalability.
+EarnGen AI is built with modern web technologies focused on performance, scalability, security, and a smooth user experience.
 
-- **Framework:** [TanStack Start](https://tanstack.com/start) / React 19 (SSR enabled for instant loads and SEO).
-- **Routing:** File-based routing via `TanStack Router` (Type-safe and lightning fast).
-- **State & Data Fetching:** `TanStack Query` seamlessly integrated with the router.
-- **Styling:** `Tailwind CSS v4` + `Radix UI` primitives for accessible, beautiful components.
-- **Backend & Auth:** [Supabase](https://supabase.com) (PostgreSQL, Edge Functions, Realtime subscriptions).
-- **Animations & UI:** `Embla Carousel`, `tw-animate-css`, and custom micro-interactions for a premium feel.
-
+Languages: JavaScript, TypeScript, HTML, CSS
+Frontend: React.js
+Framework & Routing: TanStack Start
+Styling: Tailwind CSS
+Backend & Database: Supabase + PostgreSQL
+Authentication: Supabase Auth
+UI/UX: Responsive design, animations & interactive components
 ---
 
 ## 🗺️ Platform Topography
